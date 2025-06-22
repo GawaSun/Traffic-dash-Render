@@ -2,7 +2,7 @@
 
 https://traffic-dash-render.onrender.com
 
-- Currently facing issues on RENDERs free option because my project file is too large. Will find a fix soon. 
+- Currently facing issues on RENDERs free option because my project is too large. Will find a fix soon. 
 - The project can be ran locally with streamlit. If you are Lithuanian, or curious by nature you may find it worth the effort.
 
 # Traffic Behavior Dashboard with Machine Learning
