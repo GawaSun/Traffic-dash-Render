@@ -22,6 +22,43 @@ import warnings
 
 st.set_page_config(layout="wide", page_title="Traffic", page_icon="🚗")
 
+# RAM optimization for render: downcast numeric columns and factorize low-cardinality strings
+def optimize_dataframe_memory(df):
+    import numpy as np
+
+    # Measure starting memory
+    initial_memory = df.memory_usage(deep=True).sum() / (1024 ** 2)
+
+    for col in df.columns:
+        col_type = df[col].dtype
+
+        # Convert text columns with few unique values to categorical
+        if col_type == object:
+            num_unique = df[col].nunique()
+            num_total  = len(df[col])
+            if num_unique / num_total < 0.5:
+                df[col] = df[col].astype('category')
+
+        # Downcast integers
+        elif 'int' in str(col_type):
+            c_min, c_max = df[col].min(), df[col].max()
+            if c_min > np.iinfo(np.int8).min  and c_max < np.iinfo(np.int8).max:
+                df[col] = df[col].astype(np.int8)
+            elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                df[col] = df[col].astype(np.int16)
+            elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                df[col] = df[col].astype(np.int32)
+
+        # Downcast floats
+        elif 'float' in str(col_type):
+            df[col] = df[col].astype(np.float32)
+
+    # (Optional) print memory savings for debugging
+    final_memory = df.memory_usage(deep=True).sum() / (1024 ** 2)
+    print(f"Memory optimized: {initial_memory:.1f} → {final_memory:.1f} MB")
+    return df
+
+
 @st.cache_data
 def load_data():
     df = pd.read_csv("traffic_data_approx_50MB.csv")
