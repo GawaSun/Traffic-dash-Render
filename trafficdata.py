@@ -61,19 +61,6 @@ def optimize_dataframe_memory(df):
 
 @st.cache_data
 def load_data():
-    usecols = [
-        "Vehicle_Date",
-        "Number_of_Vehicles",
-        "Average_Speed",
-        "Month",
-        "Road_Number",
-        "License_Plate_Country",
-        "Range_Identifier",
-        "Range_Latitude_ETRS89",
-        "Range_Longitude_ETRS89",
-        "Vehicle_Type",
-        "Vehicle_Direction",
-    ]
     df = pd.read_csv("traffic_data_approx_50MB.csv", usecols=usecols)
     df = optimize_dataframe_memory(df)
     return df
