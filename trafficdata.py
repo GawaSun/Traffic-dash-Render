@@ -24,7 +24,10 @@ st.set_page_config(layout="wide", page_title="Traffic", page_icon="🚗")
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("traffic_data_approx_50MB.csv")
+    df = pd.read_csv("traffic_data_approx_50MB.csv")
+    # Downcast numerics and factorize strings
+    df = optimize_dataframe_memory(df)
+    return df
 
 #final_df = load_data()
 
