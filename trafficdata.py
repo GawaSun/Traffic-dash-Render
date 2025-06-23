@@ -504,7 +504,7 @@ with st.spinner("Loading dashboard..."):
         st.subheader("📆 Traffic Calendar")
         def traffic_calendar(df):
             df['Vehicle_Date'] = pd.to_datetime(df['Vehicle_Date'], errors ='coerce')
-            df = df.dropna(df_subset=['Vehicle_Date'])
+            df = df.dropna(subset=['Vehicle_Date'])
             selected_year = st.selectbox("Select a Year:", sorted(df['Vehicle_Date'].dt.year.unique()),key='year')
             df = df[df['Vehicle_Date'].dt.year == selected_year]
     
