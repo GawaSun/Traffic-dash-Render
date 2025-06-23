@@ -448,20 +448,8 @@ if show_dashboard:
             df_no_duplicates = final_df.drop_duplicates(subset=["Range_Identifier", "Number_of_Vehicles", "Average_Speed"])
 
             grouped_df = (
-                df_no_duplicates
-                .groupby(
-                    ["Range_Identifier", "Road_Number"],
-                    as_index=False
-                )
-                .agg(
-                    avg_vehicles=("Number_of_Vehicles", "mean"),
-                    avg_speed   =("Average_Speed",       "mean"),
-                    lat         =("Range_Latitude_ETRS89","first"),
-                    lon         =("Range_Longitude_ETRS89","first"),
-                )
+                df_no_duplicates.groupby(["Range_Identifier", "Road_Number"], as_index=False).agg(avg_vehicles=("Number_of_Vehicles", "mean"),avg_speed =("Average_Speed", "mean"),lat =("Range_Latitude_ETRS89","first"),lon =("Range_Longitude_ETRS89","first"))
             )
-
-
 
             road_stats_avg = (
                 grouped_df
@@ -470,13 +458,13 @@ if show_dashboard:
                     avg_vehicles=("Number_of_Vehicles",     "mean"),
                     avg_speed   =("Average_Speed",          "mean"),
                     lat         =("Range_Latitude_ETRS89",  "first"),
-                    lon         =("Range_Longitude_ETRS89", "first"),
+                    lon         =("Range_Longitude_ETRS89", "first")
                 )
                 .rename(columns={
                     "avg_vehicles": "Average Number of Vehicles",
                     "avg_speed":    "Average Speed (km/h)",
                     "lat":          "Latitude",
-                    "lon":          "Longitude",
+                    "lon":          "Longitude"
                 })
             )
 
