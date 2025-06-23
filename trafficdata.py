@@ -447,26 +447,39 @@ if show_dashboard:
             duplicates = final_df[final_df.duplicated(subset=["Range_Identifier", "Number_of_Vehicles", "Average_Speed"], keep=False)]
             df_no_duplicates = final_df.drop_duplicates(subset=["Range_Identifier", "Number_of_Vehicles", "Average_Speed"])
 
-            grouped_df = df_no_duplicates.groupby(["Range_Identifier", "Road_Number"], as_index=False).agg({
-                "Number_of_Vehicles": "mean",
-                "Average_Speed": "mean",
-                "Range_Latitude_ETRS89": "first",
-                "Range_Longitude_ETRS89": "first"
-            })
+            grouped_df = (
+                df_no_duplicates
+                    .groupby(["Range_Identifier", "Road_Number"],
+                             as_index=False
+                    )
+                    .agg(
+                        avg_vehicles=("Number_of_Vehicles", "mean"),
+                        avg_speed   =("Average_Speed",       "mean"),
+                        lat         =("Range_Latitude_ETRS89","first"),
+                        lon         =("Range_Longitude_ETRS89","first"),
+                    )
+            )
 
-            road_stats_avg = grouped_df.groupby("Road_Number").agg({
-                "Number_of_Vehicles": "mean",
-                "Average_Speed": "mean",
-                "Range_Latitude_ETRS89": "first",
-                "Range_Longitude_ETRS89": "first"
-            }).reset_index()
 
-            road_stats_avg.rename(columns={
-                "Number_of_Vehicles": "Average Number of Vehicles",
-                "Average_Speed": "Average Speed (km/h)",
-                "Range_Latitude_ETRS89": "Latitude",
-                "Range_Longitude_ETRS89": "Longitude"
-            }, inplace=True)
+            road_stats_avg = (
+                grouped_df
+                    .groupby("Road_Number", as_index=False)
+                    .agg(
+                        avg_vehicles=("Number_of_Vehicles",    "mean"),
+                        avg_speed   =("Average_Speed",         "mean"),
+                        lat         =("Range_Latitude_ETRS89", "first"),
+                        lon         =("Range_Longitude_ETRS89","first"),
+                    )
+                    .rename(
+                        columns={
+                            "avg_vehicles": "Average Number of Vehicles",
+                            "avg_speed":    "Average Speed (km/h)",
+                            "lat":          "Latitude",
+                            "lon":          "Longitude"
+                        }
+                    )
+            )
+
 
             st.title("Traffic Data Visualization")
 
