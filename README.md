@@ -87,7 +87,6 @@ A comprehensive, interactive dashboard for analyzing, visualizing, and predictin
 
 * **Streamlit Cloud**: Connect GitHub, ensure `runtime.txt` is in root, clear cache & deploy.
 * **Render**: Define `Build Command: pip install -r requirements.txt` and `Start Command: streamlit run trafficdata.py`.
-* **Docker**: (Optional) Containerize for reproducibility.
 
 ---
 
