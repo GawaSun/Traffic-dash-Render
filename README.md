@@ -1,101 +1,104 @@
-### Live demo of app: 
+### Live Demo: [https://traffic-dash-render-vbqsdvhakghyew5ppdxsxu.streamlit.app/]
 
-https://traffic-dash-render.onrender.com
+# Traffic Behavior Dashboard with Machine Learning 
 
-- Currently facing issues on RENDERs free option because my project is too large. Will find a fix soon. 
-- The project can be ran locally with streamlit. If you are Lithuanian, or curious by nature you may find it worth the effort.
+A comprehensive, interactive dashboard for analyzing, visualizing, and predicting traffic patterns in Lithuania (2017–2023). Built with **Streamlit**, integrated with a live traffic API, and powered by machine learning models, this project showcases data analysis/visualization, geospatial mapping, time series analytics, and predictive modeling skills.
 
-# Traffic Behavior Dashboard with Machine Learning
+---
 
-This project presents an interactive dashboard built using Streamlit to analyze and predict traffic behavior using a real-world traffic dataset. The original dataset was quite large, so efficient techniques were employed for model training and deployment. The dashboard includes two machine learning models:
+## Project Overview
 
-- `avg_speed_model.pkl`: Predicts average speed of vehicles
-- `volume_model.pkl`: Predicts traffic volume (number of vehicles)
+* **Interactive Web App**: Multi-tab Streamlit dashboard offering exploratory analysis, geospatial maps, calendar heatmaps, holiday comparisons, clustering, and forecasting.
+* **Machine Learning**: Two trained models:
 
-Both models are trained using a combination of numerical and categorical features, including derived features like 'Road_Type', and are visualized through a user-friendly interface.
+  * **Average Speed Predictor** (`avg_speed_model.pkl`)
+  * **Traffic Volume Predictor** (`volume_model.pkl`)
+* **Live Data Integration**: Real-time traffic intensity via REST API (`eismoinfo.lt/traffic-intensity-service`).
+* **Data Source**: \~50 MB CSV of traffic counts (`traffic_data_approx_50MB.csv`), managed via Git LFS for smooth collaboration.
 
-## Features
+---
 
-- Predict average speed and traffic volume based on user inputs
-- Interactive map visualization
-- Clean UI for interpreting traffic patterns
-- Efficiently trained models capable of handling large datasets
-- Utilizes derived 'Road_Type' for more accurate predictions.
+## Key Features
 
-## Technologies Used
+1. **Homepage & Summary**: Random data samples, descriptive statistics, and summary tables.
+2. **Trend Analysis**: Histograms, line charts, and bar plots for speeds and volumes over days, months, and years.
+3. **Geospatial Mapping**:
 
-- Python
-- Pandas
-- scikit-learn
-- Streamlit
-- joblib (for saving/loading models)
-- Plotly (for interactive visualizations)
-- geopandas (for mapping)
--`LightGBM` (for efficient model training)
-## Files in This Repository
+   * Static scatter-map of average traffic per road segment.
+   * Live map of current traffic intensity (green/orange/red) with hover details.
+4. **Clustering**: K‑Means clustering on road segments by speed & volume, visualized on a map.
+5. **Holiday vs. Non-Holiday**: Box plots comparing traffic volumes on Lithuanian public holidays.
+6. **Calendar Heatmap**: Monthly calendar grid showing daily vehicle counts, top-10 busiest days, and holiday annotations.
+7. **Speed Behavior**: Seasonal analysis of speeding vs. compliant vehicles across major roads.
+8. **Country & Direction Analysis**: Traffic breakdown by license-plate country and direction (N vs. T).
+9. **Vehicle-Type Insights**: Contribution of different vehicle types to congestion on selected roads.
+10. **Predictive Modeling**: User-input forms driving ML models to forecast average speed or volume under custom scenarios.
 
-- `trafficdata.py`: Main Streamlit app containing the dashboard logic
-- `traffic_data_approx_50MB.csv`: Full dataset (managed with Git LFS) used for model training and potentially for dashboard analysis.
-- `avg_speed_model.pkl`: Trained model to predict average speed
-- `volume_model.pkl`: Trained model to predict number of vehicles
-- `requirements.txt`: Lists all Python dependencies for deployment.
-- `README.md`: This documentation file
+---
 
-## How to Run the Project
+## Technologies & Libraries
 
-### Prerequisites
+* **Web & UI**: Streamlit, Plotly, Matplotlib, Seaborn, Calplot
+* **Data Processing**: Pandas, NumPy, GeoPandas, Shapely
+* **Geospatial**: PyProj, OpenStreetMap tiles
+* **Machine Learning**: scikit-learn (KMeans, StandardScaler), LightGBM
+* **Model Management**: Joblib
+* **APIs & External Data**: `requests`, Lithuanian public holidays via `holidays` library, live REST API integration
+* **Utilities**: Python 3.11, Git LFS, requirements managed in `requirements.txt`
 
-- Git and Git LFS installed (for cloning and handling large files)
-- Python 3.9+ installed
+---
 
-### Option 1: Run Locally
+## Getting Started
 
-1.  **Clone this repository (ensure Git LFS is installed and active):**
-    ```bash
-    git clone your-repository-url
-    cd your-repository-name
-    ```
-2.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-3.  **Run the Streamlit app:**
-    ```bash
-    streamlit run trafficdata.py
-    ```
+1. **Clone & Install**
 
-### Option 2: Run on Google Colab (for Development/Retraining)
+   ```bash
+   git clone <your-repo-url>
+   cd <your-repo>
+   pip install -r requirements.txt
+   ```
+2. **Set Runtime (Streamlit Cloud)**
 
-1.  **Upload all project files** (including `trafficdata.py`, `traffic_data2.csv`, `avg_speed_model.pkl`, `volume_model.pkl`, and `requirements.txt`) to your Colab session.
-2.  **Ensure correct package versions:**
-    ```python
-    !pip install -r requirements.txt --force-reinstall
-    ```
-3.  **Run your Streamlit app from Colab:**
-    ```python
-    !streamlit run trafficdata.py --server.port 8501 --server.headless true
-    # You might need ngrok for a public URL if not deploying to Render directly.
-    # from pyngrok import ngrok
-    # public_url = ngrok.connect(port='8501')
-    # print("Streamlit app URL:", public_url)
-    ```
+   ```text
+   # runtime.txt
+   python-3.11.4
+   ```
+3. **Run Locally**
 
-### Option 3: Deploy to Render (Recommended for Production)
+   ```bash
+   streamlit run trafficdata.py
+   ```
 
-This project is configured for easy deployment to Render.
+## Repository Structure
 
-1.  **Ensure all files are committed to your GitHub repository**, including:
-    * `trafficdata.py`
-    * `avg_speed_model.pkl`
-    * `volume_model.pkl`
-    * `traffic_data2.csv` (tracked with Git LFS)
-    * `requirements.txt`
-2.  **Go to your Render Dashboard** (dashboard.render.com).
-3.  **Create a New Web Service.**
-4.  **Connect your GitHub repository.**
-5.  **Configure the service with the following settings:**
-    * **Runtime:** `Python 3`
-    * **Build Command:** `pip install -r requirements.txt`
-    * **Start Command:** `streamlit run trafficdata.py`
-    * Choose your desired **Plan Type** (consider a paid plan if you encounter memory issues with `traffic_data2.csv` on the free tier).
-6.  **Click "Create Web Service"** and monitor the deployment logs. Once deployed, Render will provide your live application URL.
+```text
+├── trafficdata.py           # Main Streamlit app
+├── traffic_data_approx_50MB.csv  # Raw traffic dataset (Git LFS)
+├── avg_speed_model.pkl      # Pre-trained speed prediction model
+├── volume_model.pkl         # Pre-trained volume prediction model
+├── requirements.txt         # Project dependencies
+├── runtime.txt              # Python version spec for deployment
+└── README.md                # Project documentation
+```
+
+---
+
+## Deployment
+
+* **Streamlit Cloud**: Connect GitHub, ensure `runtime.txt` is in root, clear cache & deploy.
+* **Render**: Define `Build Command: pip install -r requirements.txt` and `Start Command: streamlit run trafficdata.py`.
+* **Docker**: (Optional) Containerize for reproducibility.
+
+---
+
+## Skills Demonstrated
+
+* End-to-end data pipeline: ingestion, cleaning, caching, aggregation, and visualization.
+* Geospatial transformations and mapping.
+* Time-series analysis with pandas and calendar plotting.
+* REST API integration and caching strategies.
+* Clustering and supervised ML modeling.
+* Productionizing Python apps with Streamlit and cloud deployment.
+* Version control of large datasets via Git LFS.
+
+
