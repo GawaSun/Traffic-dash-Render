@@ -503,7 +503,8 @@ with st.spinner("Loading dashboard..."):
     with tab7:
         st.subheader("📆 Traffic Calendar")
         def traffic_calendar(df):
-            df['Vehicle_Date'] = pd.to_datetime(df['Vehicle_Date'])
+            df['Vehicle_Date'] = pd.to_datetime(df['Vehicle_Date'], errors ='coerce')
+            df = df.dropna(df_subset=['Vehicle_Date'])
             selected_year = st.selectbox("Select a Year:", sorted(df['Vehicle_Date'].dt.year.unique()),key='year')
             df = df[df['Vehicle_Date'].dt.year == selected_year]
     
@@ -592,7 +593,8 @@ with st.spinner("Loading dashboard..."):
                 st.warning("No data for selected filters.")
                 return
     
-            df_filtered['Vehicle_Date'] = pd.to_datetime(df_filtered['Vehicle_Date'])
+            df_filtered['Vehicle_Date'] = pd.to_datetime(df_filtered['Vehicle_Date'], errors='coerce')
+            df_filtered = df_filtered.dropna(subset=['Vehicle_Date'])
             selected_year2 = st.selectbox("Select a Year:", sorted(df_filtered['Vehicle_Date'].dt.year.unique()),key='year2')
             df_year = df_filtered[df_filtered['Vehicle_Date'].dt.year == selected_year2].copy()
     
