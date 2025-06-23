@@ -61,7 +61,7 @@ def optimize_dataframe_memory(df):
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("traffic_data_approx_50MB.csv", usecols=usecols)
+    df = pd.read_csv("traffic_data_approx_50MB.csv")
     df = optimize_dataframe_memory(df)
     return df
 
